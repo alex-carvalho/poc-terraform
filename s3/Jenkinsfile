@@ -29,7 +29,7 @@ pipeline {
         stage('terraform apply') {
             steps {
                 input 'Apply the plan'
-                sh "terraform apply ${params.DESTROY ? '-destroy' : ''} -input=tfplan"
+                sh "terraform apply ${params.DESTROY ? '-destroy' : ''} tfplan"
             }
         }
     }
