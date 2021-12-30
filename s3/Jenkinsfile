@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    parameters {
+        booleanParam(name: 'DESTROY', defaultValue: false, description: 'Execute terraform destroy?')
+    }
+
+    stages {
+        stage('Checkout code') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('terraform init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+
+        stage('terraform plan') {
+            steps {
+                echo "${params.DESTROY}"
+                sh "terraform plan ${params.DESTROY ? '-destroy' : ''} -out=tfplan"
+            }
+        }
+
+        stage('terraform apply') {
+            steps {
+                input 'Apply the plan'
+                sh "terraform apply ${params.DESTROY ? '-destroy' : ''} -input=tfplan"
+            }
+        }
+    }
+}
