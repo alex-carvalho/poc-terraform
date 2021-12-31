@@ -14,7 +14,7 @@ pipeline {
 
         stage('terraform init') {
             steps {
-                sh 'cp -R s3/ .'
+                sh 'cp -a s3/. .'
                 sh 'terraform init'
             }
         }
